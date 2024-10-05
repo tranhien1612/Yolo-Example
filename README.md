@@ -2,6 +2,28 @@
 
 [Train YOLOv8 on Custom Dataset ](https://learnopencv.com/train-yolov8-on-custom-dataset/)
 
+The steps to train a YOLOv8 object detection model on custom data are:
+1. Install YOLOv8 from pip
+2. Create a custom dataset with labelled images
+3. Use the yolo command line utility to run train a model
+4. Run inference with the YOLO command line application
+
+### How to Install YOLOv8
+
+To install YOLOv8 from pip, use the following command:
+```
+pip install ultralytics
+```
+
+You can install the model from the source on GitHub using these commands:
+```
+git clone https://github.com/ultralytics/ultralytics
+cd ultralytics
+pip install -e ultralytics
+```
+
+### Preparing a custom dataset for YOLOv8
+
 Download Dataset: 
 ```
 wget https://www.dropbox.com/s/qvglw8pqo16769f/pothole_dataset_v8.zip?dl=1 -O pothole_dataset_v8.zip
@@ -18,11 +40,7 @@ names:
   0: 'pothole'
 ```
 
-Install Libs:
-```
-pip install ultralytics
-```
-
+### Train YOLOv8 on a custom dataset
 Train by CMD:
 ```
 #train by yolo nano
@@ -47,7 +65,16 @@ results = model.train(
    name='yolov8n_v8_50e'
 ```
 
-Predict:
+### Validate with a new model
 ```
 yolo task=detect mode=val model=runs/detect/yolov8n_v8_50e/weights/best.pt name=yolov8n_eval data=pothole_v8.yaml imgsz=1280
+```
+
+### Predict with a custom model
+```
+yolo task=detect \
+mode=predict \
+model=runs/detect/yolov8n_v8_50e/weights/best.pt \
+conf=0.25 \
+source=/test/images
 ```
