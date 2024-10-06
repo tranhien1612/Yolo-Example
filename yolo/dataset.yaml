@@ -1,0 +1,5 @@
+train: D:\test\train
+val: D:\test\val
+
+nc: 1
+names: ["cosy cake"]
