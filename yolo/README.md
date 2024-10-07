@@ -24,6 +24,17 @@ Open website and login: http://localhost:8080/
 
 Creat project, add image, create label and export
 
+Label Format:
+```
+{object_class_id} {x_center} {y_center} {width} {height}
+
+x_center = (box_x_left+box_x_width/2)/image_width
+y_center = (box_y_top+box_height/2)/image_height
+width = box_width/image_width
+height = box_height/image_height
+```
+![image](https://www.freecodecamp.org/news/content/images/2023/04/bounding_box.png)
+
 ### Yolo tree folder
 ```
 project
