@@ -38,11 +38,14 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "teddy bear", "hair drier", "toothbrush"
               ]
 
-# for r in results:
-#     print(f"{r.boxes.xyxy[0]} {r.boxes.conf[0]} {r.boxes.cls[0]}")
-#     # x1,y1,x2,y2=r.boxes.xyxy[0]
-#     # conf=math.ceil((r.boxes.conf[0]*100))/100
-#     # cv2.rectangle(image, (x1,y1), (x2,y2), (255,0,255),3)
+def box2object(results):
+    for r in results:
+        x1,y1,x2,y2=r.boxes.xyxy[0].round().int().numpy()
+        conf = r.boxes.conf[0].float().numpy()
+        cls = r.boxes.cls[0].int().numpy()
+        cv2.rectangle(image, (x1,y1), (x2,y2), (255,0,0), 2) 
+        label=f'{classNames[cls]} {conf:.02f}'
+        cv2.putText(image, label, (x1, y1),0, 1,[255,255,255], thickness=1,lineType=cv2.LINE_AA)
 
 for r in results:
     boxes = r.boxes
