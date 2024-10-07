@@ -4,9 +4,12 @@
 import cv2, math
 import supervision as sv
 from ultralytics import YOLO
+from shapely.geometry import Polygon
+from shapely.geometry.point import Point
+import numpy as np
 
 model = YOLO("yolov8n.pt")
-image = cv2.imread("test.jpg")
+image = cv2.imread("test1.jpg")
 
 results = model(image)[0]
 '''---------------------Using Lib---------------------'''
@@ -38,6 +41,27 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "teddy bear", "hair drier", "toothbrush"
               ]
 
+counting_regions = [
+    {
+        "name": "YOLOv8 Rectangle Region",
+        "polygon": Polygon([(0, 0), (0, 300), (910, 300), (910, 0)]),  # Polygon points , anticlockwise
+        "counts": 0,
+        "region_color": (37, 255, 225),  # BGR Value
+        "text_color": (255, 255, 255),  # Region Text Color
+    },
+]
+
+def drawPolygon():
+    for region in counting_regions:
+        region_label = "Cnt: " + str(region["counts"])
+        region_color = region["region_color"]
+        region_text_color = region["text_color"]
+        polygon_coords = np.array(region["polygon"].exterior.coords, dtype=np.int32)
+
+    print(region_label)
+    cv2.putText(image, region_label, (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.7, region_text_color, 2)
+    cv2.polylines(image, [polygon_coords], isClosed=True, color=region_color, thickness=2)
+
 def box2object(results):
     for r in results:
         x1,y1,x2,y2=r.boxes.xyxy[0].round().int().numpy()
@@ -47,23 +71,14 @@ def box2object(results):
         label=f'{classNames[cls]} {conf:.02f}'
         cv2.putText(image, label, (x1, y1),0, 1,[255,255,255], thickness=1,lineType=cv2.LINE_AA)
 
-for r in results:
-    boxes = r.boxes
-    for box in boxes:
-        x1,y1,x2,y2=box.xyxy[0]
-        x1,y1,x2,y2=int(x1), int(y1), int(x2), int(y2)
-        conf=math.ceil((box.conf[0]*100))/100
-        cls=int(box.cls[0])
-        print(x1, y1, x2, y2,conf, cls)
+        # Count object into polygon
+        bbox_center = (x1 + x2) / 2, (y1 + y2) / 2 
+        for region in counting_regions:
+            if region["polygon"].contains(Point((bbox_center[0], bbox_center[1]))):
+                region["counts"] += 1
+    drawPolygon()
 
-        cv2.rectangle(image, (x1,y1), (x2,y2), (255,0,255),3) #Draw Box
+box2object(results)
 
-        class_name=classNames[cls]
-        label=f'{class_name}{conf}'
-        t_size = cv2.getTextSize(label, 0, fontScale=1, thickness=2)[0]
-
-        c2 = x1 + t_size[0], y1 - t_size[1] - 3
-        cv2.rectangle(image, (x1,y1), c2, [255,0,255], -1, cv2.LINE_AA)  # Rectangle contain text, filled 
-        cv2.putText(image, label, (x1,y1-2),0, 1,[255,255,255], thickness=1,lineType=cv2.LINE_AA)
 cv2.imshow("Image", image)
 cv2.waitKey(0)
