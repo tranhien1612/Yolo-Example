@@ -11,6 +11,8 @@ Open anaconda CMD
 ```
     pip install ultralytics
     pip install label-studio
+    pip install supervision
+    pip install opencv-python
 ```
 
 ### Using label-studio to create label for image
