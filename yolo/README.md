@@ -3,7 +3,7 @@
 ### Create env:
 Open anaconda CMD
 ```
-    conda -n <name> python=3.11
+    conda create -n <name> python=3.11
     conda activate <name>
 ```
 
