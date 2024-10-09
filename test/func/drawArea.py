@@ -52,16 +52,16 @@ class CustomDraw:
         if label is not None and label != "":
             cv2.putText(img, label, p1 , cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,255,255], thickness=2)
 
-    def drawBox_each_object(self, img, result, showLabel=False):
+    def drawBox_each_object(self, img, result, minConf = 0.5 ,showLabel=False):
         x1, y1, x2, y2 = result.boxes.xyxy[0].round().int().numpy()
         conf = result.boxes.conf[0].float().numpy()
         cls = result.boxes.cls[0].int().numpy()
         p1 = (x1, y1)
         p2 = (x2, y2)
-        cv2.rectangle(img, p1, p2, (255,0,0), 2)
-
-        if showLabel == True:
-            label = f"{cls}-{conf:.02f}"
-            cv2.putText(img, label, p1 , cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,255,255], thickness=2)
+        if conf >= minConf:
+            cv2.rectangle(img, p1, p2, (255,0,0), 2)
+            if showLabel == True:
+                label = f"{cls}-{conf:.02f}"
+                cv2.putText(img, label, p1 , cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,255,255], thickness=2)
         
             
