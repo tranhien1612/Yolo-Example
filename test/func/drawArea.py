@@ -1,4 +1,4 @@
-import cv2
+import cv2, string
 import numpy as np
 from shapely.geometry import Polygon
 from shapely.geometry.point import Point
