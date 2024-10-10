@@ -9,7 +9,12 @@ class Pre_Process:
 
     def nothing(self, e):
         pass
-    
+
+    # Threshold
+    def create_threshold_slider(self):
+        cv2.namedWindow('Image Processing')
+        cv2.createTrackbar('Threshold', 'Image Processing', 0, 255, self.nothing)
+        
     def threshold_handle(self):
         threshold = cv2.getTrackbarPos('Threshold', 'Image Processing')
         gray_image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
@@ -17,6 +22,13 @@ class Pre_Process:
         cv2.imshow('Image Processing', self.image)
         cv2.imshow('Thresholded Image', thresh_image)
 
+    # RGB
+    def create_rgb_slider(self):
+        cv2.namedWindow('Image Processing')
+        cv2.createTrackbar('Brightness', 'Image Processing', 100, 200, self.nothing)
+        cv2.createTrackbar('Contrast', 'Image Processing', 100, 300, self.nothing)
+        cv2.createTrackbar('Blur', 'Image Processing', 0, 20, self.nothing)
+        
     def rgb_handle(self):
         brightness = cv2.getTrackbarPos('Brightness', 'Image Processing')
         contrast = cv2.getTrackbarPos('Contrast', 'Image Processing')
@@ -31,6 +43,7 @@ class Pre_Process:
 
         cv2.imshow('Image Processing', adjusted_image) 
 
+    # Run
     def run(self):
         self.create_threshold_slider()
         # self.create_rgb_slider()
@@ -41,16 +54,6 @@ class Pre_Process:
                 break
 
         cv2.destroyAllWindows()
-
-    def create_threshold_slider(self):
-        cv2.namedWindow('Image Processing')
-        cv2.createTrackbar('Threshold', 'Image Processing', 0, 255, self.nothing)
-
-    def create_rgb_slider(self):
-        cv2.namedWindow('Image Processing')
-        cv2.createTrackbar('Brightness', 'Image Processing', 100, 200, self.nothing)
-        cv2.createTrackbar('Contrast', 'Image Processing', 100, 300, self.nothing)
-        cv2.createTrackbar('Blur', 'Image Processing', 0, 20, self.nothing)
 
 if __name__ == "__main__":
     mod = Pre_Process("im1.jpg")
