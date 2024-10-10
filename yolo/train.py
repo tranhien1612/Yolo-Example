@@ -1,9 +1,10 @@
 from ultralytics import YOLO
 
-model = YOLO("yolo11m.pt")
+model = YOLO("yolov8n.pt")
 
-model.train(data = "dataset.yaml", 
-            imgsz = 640, batch = 8, 
-            epochs = 1, workers = 0, 
+model.train(data = "/home/maj/yolo/item/data.yaml", 
+            project ="/home/maj/yolo/item/runs",
+            name = "detect",
+            imgsz = 640, batch = 9, 
+            epochs = 100, workers = 0, 
             device="cpu")
-
