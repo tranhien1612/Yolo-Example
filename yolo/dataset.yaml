@@ -3,3 +3,9 @@ val: D:\test\val
 
 nc: 1
 names: ["cosy cake"]
+
+# train: ../train/images
+# val: ../valid/images
+# test: ../test/images
+# nc: 6
+# names: ['cocacola-bottle', 'cocacola-can', 'dasani-bottle', 'fanta-bottle', 'fanta-can', 'sprite-can']
