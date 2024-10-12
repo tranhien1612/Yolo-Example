@@ -14,7 +14,7 @@ counting_regions = {
 }
 
 '''
-# License Plate 
+# OCR with easyOCR
 dict_char_to_int = {'O': '0',
                     'I': '1',
                     'J': '3',
@@ -66,6 +66,32 @@ def read_license_plate(reader, license_plate_crop):
     
 # License Plate 
 
+# OCR with paddle
+'''
+from paddleocr import PaddleOCR
+reader = PaddleOCR(use_angle_cls = True, use_gpu = False)
+'''
+def paddle_ocr(reader, frame, x1, y1, x2, y2):
+    frame = frame[y1:y2, x1: x2]
+    result = reader.ocr(frame, det=False, rec = True, cls = False)
+    text = ""
+    for r in result:
+        #print("OCR", r)
+        scores = r[0][1]
+        if np.isnan(scores):
+            scores = 0
+        else:
+            scores = int(scores * 100)
+        if scores > 60:
+            text = r[0][0]
+    pattern = re.compile('[\W]')
+    text = pattern.sub('', text)
+    text = text.replace("???", "")
+    text = text.replace("O", "0")
+    text = text.replace("粤", "")
+    return str(text)
+
+
 class CustomDraw:
 
     def show_obj_inf(self, result):
@@ -114,6 +140,10 @@ class CustomDraw:
             cv2.rectangle(img, p1, p2, (255,0,0), 2)
             if showLabel == True:
                 label = f"{cls}-{conf:.02f}"
-                cv2.putText(img, label, p1 , cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,255,255], thickness=2)
+                # cv2.putText(img, label, p1 , cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,255,255], thickness=2)
+                textSize = cv2.getTextSize(label, 0, fontScale=0.5, thickness=2)[0]
+                c2 = x1 + textSize[0], y1 - textSize[1] - 3
+                cv2.rectangle(img, (x1, y1), c2, (255, 0, 0), -1)
+                cv2.putText(img, label, (x1, y1 - 2), 0, 0.5, [255,255,255], thickness=1, lineType=cv2.LINE_AA)
         
             
