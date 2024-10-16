@@ -24,6 +24,6 @@ def main(model, cap):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    model = YOLO('../model/fall.pt')
-    cap = cv2.VideoCapture('../data/fall/fall.mp4')
+    model = YOLO('fall.pt')
+    cap = cv2.VideoCapture('fall.mp4')
     main(model, cap)
