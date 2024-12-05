@@ -1,6 +1,6 @@
 # Import packages 
 '''
-model: https://tfhub.dev/neso613/lite-model/yolo-v5-tflite/tflite_model/1
+model: https://github.com/margaretmz/awesome-tensorflow-lite
 pip3 install tensorflow
 wget https://storage.googleapis.com/download.tensorflow.org/models/tflite/coco_ssd_mobilenet_v1_1.0_quant_2018_06_29.zip
 unzip coco_ssd_mobilenet_v1_1.0_quant_2018_06_29.zip -d TFLite_model
